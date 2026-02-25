@@ -1,7 +1,7 @@
 /control/verbose 2
 /tracking/verbose 2
 
-/geometry/source detector1.tg
+/geometry/source detector.tg
 
 /run/initialize
 
