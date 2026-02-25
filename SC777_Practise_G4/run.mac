@@ -7,19 +7,15 @@
 
 /geometry/test/run
 
-/vis/open 
+/vis/open VRML
 /vis/drawVolume
 
 
-/gps/pos/type Point
-/gps/pos/centre -350 0 0
-/gps/direction 1 0 0
-
 /gps/particle ion
-/gps/ion 2 4 0 0
-/gps/ene/type Mono
-/gps/ene/mono 1 keV
-/run/beamOn 10
+/gps/energy 1 keV
+/gps/direction 1 0 0
+/gps/pos/centre 0 0 -150 mm
+
 
 /gps/particle e-
 /gps/ene/mono 1 MeV
