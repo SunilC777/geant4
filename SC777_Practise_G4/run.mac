@@ -7,7 +7,7 @@
 
 /geometry/test/run
 
-/vis/open VRML
+/vis/open VRML2FILE
 /vis/drawVolume
 
 
