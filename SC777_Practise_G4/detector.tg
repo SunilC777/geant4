@@ -1,20 +1,16 @@
+:volu world BOX 6*m 2*m 2*m G4_Galactic
+:vis world OFF
+
+:volu air   BOX 10*cm 10*cm 10*cm G4_AIR
+:volu water BOX 10*cm 10*cm 10*cm G4_WATER
+:volu lead  BOX 10*cm 10*cm 10*cm G4_Pb
+
 :rotm r000 0 0 0
 
-:solid World BOX 600 200 200
-:volu worldVol World G4_AIR
-:vis worldVol OFF
+:place air   1 world r000 -30*cm 0 0
+:place water 1 world r000   0    0 0
+:place lead  1 world r000  30*cm 0 0
 
-:solid AirBox BOX 80 80 80
-:volu airVol AirBox G4_AIR
-:color airVol 0.7 0.9 1.0
-:place airVol 0 worldVol r000 -200 0 0
-
-:solid WaterBox BOX 80 80 80
-:volu waterVol WaterBox G4_WATER
-:color waterVol 0.2 0.4 1.0
-:place waterVol 0 worldVol r000 0 0 0
-
-:solid LeadBox BOX 80 80 80
-:volu leadVol LeadBox G4_Pb
-:color leadVol 0.5 0.5 0.5
-:place leadVol 0 worldVol r000 200 0 0
+:color air   0.60 0.80 1.00
+:color water 0.20 0.40 1.00
+:color lead  0.60 0.60 0.60

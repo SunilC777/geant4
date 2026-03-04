@@ -1,0 +1,36 @@
+/control/verbose 1
+/run/verbose 1
+/event/verbose 0
+/tracking/verbose 2
+/geometry/source detector.tg
+/run/initialize
+
+/vis/open VRML2FILE
+/vis/drawVolume
+/vis/viewer/set/autoRefresh true
+/vis/scene/add/axes 0 0 0 100
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories smooth
+/vis/scene/endOfEventAction accumulate
+
+/gps/pos/type Point
+/gps/pos/centre -350 0 0
+/gps/direction 1 0 0
+
+/gps/particle ion
+/gps/ion 2 4 0 0
+/gps/ene/type Mono
+/gps/ene/mono 1 keV
+/run/beamOn 10
+
+/gps/particle e-
+/gps/ene/mono 1 MeV
+/run/beamOn 10
+
+/gps/particle gamma
+/gps/ene/mono 1 GeV
+/run/beamOn 10
+
+/gps/particle neutron
+/gps/ene/mono 1 MeV
+/run/beamOn 10
