@@ -1,20 +1,22 @@
 services:
-  geant4: # docker compose --profile geant4 up or docker compose run --rm geant4 tmux -u
+  geant4:
+    # docker compose --profile geant4 up or docker compose run --rm geant4 tmux -u
     image: physino/geant4:latest # minimalistic container image + cmd-line tools
     platform: linux/amd64 # for run time
     profiles: [ "geant4" ]
-    container_name: Geant4
+    container_name: geant4
     volumes: [ ".:/root/geant4" ] # load current folder as /root/geant4 in container
     # feel free to change the timezone identifier below according to
     # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
     environment: [ "TZ=US/Central" ]
-    build: # docker compose build geant4
+    build:
       context: platform/docker
       platforms: [ "linux/amd64" ] # for build time
-  novnc: # X window display sidecar for heprapp and root
+  novnc:
+    # X window display sidecar for heprapp
     image: theasp/novnc
-    profiles: [ "heprapp", "root" ]
-    container_name: noVNC
+    profiles: [ "heprapp" ]
+    container_name: vnc
     platform: linux/amd64
     ports: [ "8080:8080" ]
     environment:
@@ -22,21 +24,18 @@ services:
       - DISPLAY_HEIGHT=${DISPLAY_HEIGHT:-720}
       - RUN_XTERM=no
     command: >
-      bash -c "mkdir -p ~/.fluxbox &&
-      echo 'session.screen0.toolbar.visible: false' > ~/.fluxbox/init &&
-      echo 'session.styleFile: /usr/share/fluxbox/styles/bora_blue' >> ~/.fluxbox/init &&
-      /app/entrypoint.sh --forever --shared"
-    networks: [ "X11"]
+      bash -c "mkdir -p ~/.fluxbox && echo 'session.screen0.toolbar.visible: false' > ~/.fluxbox/init && echo 'session.styleFile: /usr/share/fluxbox/styles/bora_blue' >> ~/.fluxbox/init && /app/entrypoint.sh --forever --shared"
+    networks: [ "X11" ]
     healthcheck:
-      test: ["CMD-SHELL", "timeout 1s bash -c 'cat < /dev/null > /dev/tcp/127.0.0.1/8080' || exit 1"]
-      interval: 1s     # check every 1 seconds
-      timeout: 1s      # give up on a single check after 1s
-      retries: 5       # try 5 times before failing
+      test: [ "CMD-SHELL", "timeout 1s bash -c 'cat < /dev/null > /dev/tcp/127.0.0.1/8080' || exit 1" ]
+      interval: 1s # check every 1 seconds
+      timeout: 1s # give up on a single check after 1s
+      retries: 5 # try 5 times before failing
       start_period: 0s # wait 0s before the first check
-  heprapp: # docker compose --profile heprapp up
+  heprapp:
     image: physino/heprapp:latest
     profiles: [ "heprapp" ]
-    container_name: HepRApp
+    container_name: heprapp
     command:
       - /bin/sh
       - -c
@@ -51,35 +50,39 @@ services:
     volumes:
       - ".:/root/geant4"
       - "./vis/HepRepFile/app/user.properties:/user.properties"
-    networks: [ "X11"]
-    build: # docker compose build heprapp
+    networks: [ "X11" ]
+    build:
       context: vis/HepRepFile/app
       platforms: [ "linux/amd64", "linux/arm64" ]
-  root: # docker compose --profile root up
-    command: /usr/bin/bash # launch a command line to run root
+  root:
+    command: >
+      bash -c "socat -d0 TCP-LISTEN:9001,fork,reuseaddr TCP:127.0.0.1:9375 &  root -l --web=server:9375 -e 'new TBrowser;'"
     image: physino/root # https://hub.docker.com/r/physino/root
     profiles: [ "root" ]
-    environment:
-      - DISPLAY=host.docker.internal:0.0
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    container_name: root
+    ports: [ "9375:9001" ]
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
       - .:/root/geant4
     working_dir: /root/geant4
-    build: analysis/root
+    stdin_open: true
+    tty: true
+    build:
+      context: analysis/root
+      platforms: [ "linux/amd64", "linux/arm64" ]
   notebook:
-    # docker-compose up notebook
-    command: /usr/bin/root --notebook --allow-root --no-browser --ip=0.0.0.0
     image: physino/root:notebook
-    profiles: [ "root" ]
-    ports: [ "8888:8888" ] # only exposed with `up`, not 'run`
+    profiles: [ "notebook" ]
+    container_name: notebook
+    ports: [ "8888:8888" ]
     volumes: [ ".:/root/geant4" ]
-    build: analysis/root/notebook # docker-compose build notebook
+    build:
+      context: analysis/root/notebook
+      platforms: [ "linux/amd64", "linux/arm64" ]
   python:
     image: physino/python
     profiles: [ "python" ]
-    ports: [ "8081:8888" ]
+    container_name: Python
+    ports: [ "8988:8988" ]
     volumes: [ ".:/root/geant4" ]
     build:
       context: analysis/python
