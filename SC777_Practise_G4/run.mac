@@ -5,7 +5,7 @@
 
 /run/initialize
 
-/vis/open cd 
+/vis/open
 /vis/drawVolume
 /vis/viewer/refresh
 /vis/scene/add/axes
