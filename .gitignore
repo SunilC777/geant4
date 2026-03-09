@@ -30,4 +30,7 @@ _site
 *.gz
 *.bz2
 *.root
+*.pyc
+*checkpoints*
 .Trash*
+*test*
