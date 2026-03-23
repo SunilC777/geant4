@@ -1,0 +1,10 @@
+:volu world BOX 2*m 2*m 2*m G4_Galactic
+:vis world OFF
+
+:volu Silicon BOX 10*cm 10*cm 10*cm G4_Si
+
+:rotm r000 0 0 0
+
+:place Silicon 1 world r000  0 0 0
+
+:color Silicon  0.60 0.60 0.60

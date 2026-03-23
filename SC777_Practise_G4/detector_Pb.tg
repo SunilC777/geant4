@@ -1,0 +1,6 @@
+:volu world BOX 2*m 2*m 2*m G4_AIR
+:vis world OFF
+:volu target BOX 20*cm 20*cm 20*cm G4_Pb
+:color target 0.3 0.3 0.5
+:rotm r000 0 0 0
+:place target 1 world r000 0 0 0
